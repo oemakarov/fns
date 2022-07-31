@@ -113,10 +113,6 @@ class FNS(object):
             self.log.warning('[fns] more then 1 organisation' )
                 
 
-        # print('---'*10) 
-        # print('self.response_raw', self.response_raw) 
-
-
         if self.response_num > 1: 
             if selecte_one:
                 if self.response_act_num >= 1:
