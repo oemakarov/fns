@@ -6,8 +6,6 @@ import requests
 from time import sleep
 import pdfminer.high_level
 import logging
-#__version__ = '0.18'
-
 class FNS(object):
     """Получение информации из реестра ФНС
 
