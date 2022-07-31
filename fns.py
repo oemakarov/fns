@@ -202,7 +202,7 @@ class FNS(object):
             else:
                 print('*** error : отсутствует поле должность и ФИО')
                 self.log.warning('[fns] no position and fio fields' )
-                self.log.warning('[fns] _response = %s' % _response)
+                self.log.warning('[fns] _response = %s' % self._response)
                 self.position = ''
 
         # если не юр лицо берем фио
@@ -279,8 +279,8 @@ class FNS(object):
                 # print(json.loads(_req2.text))  # что вернет
                 
             if _req2.status_code != requests.codes.ok :
-                print('*** error : ошибка ПОЛУЧЕНИЯ ответа из nalog.ru. код ошибки', r.status_code)  
-                self.log.error('[fns] ошибка ПОЛУЧЕНИЯ ответа из nalog.ru. код ошибки = %s' % r.status_code)
+                print('*** error : ошибка ПОЛУЧЕНИЯ ответа из nalog.ru. код ошибки', _req2.status_code)
+                self.log.error('[fns] ошибка ПОЛУЧЕНИЯ ответа из nalog.ru. код ошибки = %s' % _req2.status_code)
                 print(json.loads(_req2.text)) 
                 break    # точно return?
 
@@ -400,8 +400,8 @@ class FNS(object):
                 # print(r.text) 
                 sleep(attempt_counter*10)
                 continue
-            print('необрабатываемый статус ответа ФНС [get_doc_pdf]', r.text) 
-            self.log.info('[fns] [get_doc_pdf] необрабатываемый статус ответа ФНС %s' % r.text)
+            print('необрабатываемый статус ответа ФНС [get_doc_pdf]', _req2.text)
+            self.log.info('[fns] [get_doc_pdf] необрабатываемый статус ответа ФНС %s' % _req2.text)
 
         else:
             return b''
