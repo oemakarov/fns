@@ -50,11 +50,8 @@ class FNS(object):
         """
         self.log = logging.getLogger('FNS')
         self.log.debug('[FNS] inn=%s selecte_one=%s proxy=%s' % (inn, selecte_one, proxy))
-
         self._reset_variables()
-
         self.session = requests.Session()
-
         if proxy:
             self.session.proxies.update(proxy)
             self.session.trust_env = False
@@ -63,17 +60,14 @@ class FNS(object):
             self.info(inn, selecte_one=selecte_one)   # get_data
                     
     def _reset_variables(self):
-
         self.type = ''
         self.title_long = ''
         self.title_short = ''
         self.position = ''
         self.fio = ''
-
         self.fio_f = ''
         self.fio_i = ''
         self.fio_o = ''
-
         self.address = ''
         self.inn = ''
         self.ogrn = ''
@@ -85,14 +79,10 @@ class FNS(object):
         self.dirs_raw = ''
         self.dirs = {}
         self.dirs_num = 0
-
         self.dict = {}
-
         self.is_one_record = False
-
         self.is_doc_loaded = False
         self.doc_pdf = b''
-
         self.is_valid_org = None
 
 # +++  проверить переменные ниже
@@ -100,7 +90,6 @@ class FNS(object):
         self.response_raw = ''
         self._response = ''
         self.response_num = 0
-
         self.response_act = ''
         self.response_act_num = 0
 
