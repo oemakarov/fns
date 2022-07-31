@@ -93,7 +93,6 @@ class FNS(object):
         self.response_act = ''
         self.response_act_num = 0
 
-
 # +++ сделать метод сырой поиск, поиск с выводом действующих организаций
 
     def info(self, inn, selecte_one=True, attempts=10):
