@@ -279,9 +279,7 @@ class FNS(object):
                 self.log.error('[fns] ошибка ПОЛУЧЕНИЯ ответа из nalog.ru. код ошибки = %s' % _req2.status_code)
                 print(json.loads(_req2.text)) 
                 break    # точно return?
-
             j2 = json.loads(_req2.text)
-
             if j2 == dict(status = 'wait'):
                 print('Ждем ответ ФНС ...') 
                 self.log.info('[fns] Ждем ответ ФНС ...')
