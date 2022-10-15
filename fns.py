@@ -147,7 +147,6 @@ class FNS(object):
         if self.type == 'fl':
             return
 
-
         self.title_long = self._response.get('n','')
         self.title_short = self._response.get('c','')
         self.address = self._response.get('a','')
