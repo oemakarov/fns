@@ -6,6 +6,8 @@ import requests
 from time import sleep
 import pdfminer.high_level
 import logging
+
+
 class FNS(object):
     """Получение информации из реестра ФНС
 
@@ -146,6 +148,7 @@ class FNS(object):
         
         if self.type == 'fl':
             return
+
 
         self.title_long = self._response.get('n','')
         self.title_short = self._response.get('c','')
@@ -485,10 +488,7 @@ class FNS(object):
             print('ДАНЫЕ ВЫПИСКИ НЕ ПОЛУЧЕНЫ. проверка недостоверности не завершена') 
 
 
-
-
-
-    def is_inn(self, inn):
+    def is_inn(self, inn: str):
         """
             Проверка строки на формат ИНН
             возвращвет True если выполняются все условия 
@@ -503,7 +503,7 @@ class FNS(object):
 
         if inn.isdigit() and \
                 not inn.startswith('00') and \
-                ((len(inn) == 10) or (len(inn) == 12)) :
+                (len(inn) in (10, 12)) :
 
             return True
         else:
@@ -606,52 +606,6 @@ class FNS(object):
 
 
 
-def find_fl_inn(fio_f, fio_i, fio_o, birthdate, doctype, docnumber, docdate):
-    """
-    docnumber="40 09 950176"
-    """
-    doc_type_code = {
-        'passport_ussr' : '01',  # Паспорт гражданина СССР
-        'birth_certificate' : '03', # Свидетельство о рождении
-        'passport_foreign' : '10', # Паспорт иностранного гражданина
-        'residence_permit' : '12', # Вид на жительство в России
-        'residence_permit_temp' : '15', # Разрешение на временное проживание в России
-        'asylum_certificate_temp' : '19', # Свидетельство о предоставлении временного убежища на территории России
-        'passport_russia' : '21', # Паспорт гражданина России
-        'birth_certificate_foreign' : '23', # Свидетельство о рождении, выданное уполномоченным органом иностранного государства
-        'residence_permit_foreign' : '62', # Вид на жительство иностранного гражданина
-        }
-
-    url = 'https://service.nalog.ru/inn-proc.do'
-    data = {
-        'fam': fio_f,
-        'nam': fio_i,
-        'otch': fio_o,
-        'bdate': birthdate,
-        'bplace': '',
-        'doctype': doc_type_code[doctype],
-        'docno': docnumber,
-        'docdt': docdate,
-        'c': 'innMy',
-        'captcha': '',
-        'captchaToken': '',
-    }
-
-    try:
-        resp = requests.post(url=url, data=data)
-    except Exception as e:
-        return {'code': 0, 'message' : f'Ошибка запроса к ФНС {e}'}
-
-    if resp.status_code != requests.codes.ok :
-        print('*** error : ошибка получения ответа. код ошибки =', resp.status_code) 
-        # resp.raise_for_status()
-        return {'code': 0, 'message' : f'код ошибки {resp.status_code}'}
-    else:
-        return resp.json()
-
-    
-
-
 
 
 
@@ -659,6 +613,9 @@ def find_fl_inn(fio_f, fio_i, fio_o, birthdate, doctype, docnumber, docdate):
 
 
 if __name__ == '__main__':
-    inn = 920400134623
-    fns = FNS(inn)
-    print(fns.dict) 
+    pass
+    # pass
+    # inn = 920400134623
+    # fns = FNS(inn)
+    # print(fns.dict)
+    
