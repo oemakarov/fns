@@ -86,16 +86,12 @@ class FNS(object):
         self.is_doc_loaded = False
         self.doc_pdf = b''
         self.is_valid_org = None
-
-# +++  проверить переменные ниже
-
         self.response_raw = ''
         self._response = ''
         self.response_num = 0
         self.response_act = ''
         self.response_act_num = 0
 
-# +++ сделать метод сырой поиск, поиск с выводом действующих организаций
 
     def info(self, inn, selecte_one=True, attempts=10):
         """
@@ -107,7 +103,6 @@ class FNS(object):
 
         self.response_raw = self._get_response(inn, attempts)
         self.response_act = self._acting_records(self.response_raw)
-        # print('self.response_act', self.response_act) 
         self.response_act_num = len(self.response_act)
 
         if self.response_act_num >1:
@@ -190,16 +185,7 @@ class FNS(object):
         else:
             if 'n' in self._response:
                 self.fio = self._response['n']
-
-        # if (self._response['k'] == 'ul') and ('g' in self._response):
-
-            # if ',' in self._response['g'] and self._response['g'].count(':') > 1:
-
-            # self.fio = self._response['g'].split(',')[0].split(':')[1].strip()
-
         self.fio_f, self.fio_i, self.fio_o = self.fio_split(self.fio)
-
-        
         self._write_dict()
 
 
@@ -283,12 +269,10 @@ class FNS(object):
                 return j2['rows']
 
             return j2['rows'] # если одна запись возвращаем не список, а сам словарь
-            # return j2['rows'][0] # если одна запись возвращаем не список, а сам словарь
         return []
 
 
     def _acting_records(self, list_of_dicts):
-
         actual_list_of_dicts = []
         if len(list_of_dicts) == 1 and list_of_dicts[0].get('tot') == '0':
             return []
@@ -370,7 +354,6 @@ class FNS(object):
                 self.log.warning('[fns] [get_doc_pdf] ошибка получения статуса выписки. %s' % _req2.text)
 
             if j2 == 'ready': # ответ готов, выходим из цикла
-                # print('выписка получена') 
                 break
 
             if j2 == 'wait': 
@@ -383,16 +366,14 @@ class FNS(object):
             self.log.info('[fns] [get_doc_pdf] необрабатываемый статус ответа ФНС %s' % _req2.text)
 
         else:
-            return b''
             self.log.warning('[fns] [get_doc_pdf] пустой ответ')
+            return b''
 
         _req3 = self.session.get(self._URL_GET_DOC_DOWNLOAD + self.doc_token) # получение выписки
         self.doc_pdf = _req3.content
         self.is_doc_loaded = True
         return self.doc_pdf
- 
 
-# ----------------
 
     def save_doc_pdf(self, filename):
         """
@@ -408,8 +389,6 @@ class FNS(object):
             f.write(self.get_doc_pdf())
 
         f.close()
-
-# ----------------
 
 
     def _write_dict(self):
@@ -449,14 +428,8 @@ class FNS(object):
             имя - второе слово
             отчество - третье слово и последующие
         """
-        
-        fio_parts = ' '.join(fio.split()).split()
-        fio_parts_num = len(fio_parts)
-
-        fio_f = fio_parts[0] if fio_parts_num >= 1 else ''
-        fio_i = fio_parts[1] if fio_parts_num >= 2 else ''
-        fio_o = ' '.join(fio_parts[2:]) if fio_parts_num >= 3 else ''
-        return fio_f, fio_i, fio_o
+        parts = fio.split() + ['','','']
+        return parts[0], parts[1], ' '.join(parts[2:]).strip()
 
 
     def is_valid_org_check(self, attempts=10, pages_to_parse=4):
@@ -465,9 +438,7 @@ class FNS(object):
             Проверяет наличие слова "недостоверн" в выписке ЕГРЮЛ в первых 3 страницах
         """
         self.is_valid_org = None
-
         if not self.is_doc_loaded:
-            # self.get_doc_pdf(self.doc_token)
             self.get_doc_pdf(attempts)
 
         if self.doc_pdf:
@@ -498,9 +469,7 @@ class FNS(object):
 
             :inn: инн на проверку
         """
-
         inn = str(inn)
-
         if inn.isdigit() and \
                 not inn.startswith('00') and \
                 (len(inn) in (10, 12)) :
@@ -511,20 +480,17 @@ class FNS(object):
             return False
 
 
-
     def _dirs_dict(self, director_string):
         """
             Возвращает список со словарями в случае нескольких директоров в организации
             каждый словарь содержит поля
             position, fio
         """
-
             # : разделяет должность и фио
             # , разделяет список руководителей (либо участвует в названии должности)
 
         result_list = []
         dirs_dict = {}
-
         temp_list = director_string.split(':') # 
 
         for i in range(0, len(temp_list)):
@@ -540,23 +506,18 @@ class FNS(object):
 
         for i in range(0, len(result_list), 2):
             i_new = i // 2
-
             dirs_dict.update({i_new:{}})
             dirs_dict[i_new].update({'position' : result_list[i]})
             dirs_dict[i_new].update({'fio' : result_list[i+1]})
-
         self.dirs_num = len(result_list) // 2
-
         return dirs_dict
 
 
 # ----------------
 
     def addr_cut(self, address):
-        
         new_address = address
         cuts = []
-
         cuts.append([', ', '[РАЗДЕЛИТЕЛЬ]'])
         cuts.append([',', '[РАЗДЕЛИТЕЛЬ]'])
         cuts.append([' УЛИЦА ', '[УЛИЦА]'])
@@ -590,32 +551,14 @@ class FNS(object):
         cuts.append([' КОМНАТА ', '[КОМНАТА]'])
         cuts.append([' КОМ.', '[КОМНАТА]'])
         cuts.append(['  ', ' '])
-        # cuts.append('')
-        # print(cuts) 
 
         for cut in cuts:
             new_address = new_address.replace(cut[0], cut[1])
-            # print(new_address)
-
         new_address = new_address.replace('[РАЗДЕЛИТЕЛЬ]', ' ')
         new_address = new_address.replace('[ГОРОД]', ' ')
-
         return new_address
-
-
-
-
-
-
-
-
-# ------------------------------------------------
 
 
 if __name__ == '__main__':
     pass
-    # pass
-    # inn = 920400134623
-    # fns = FNS(inn)
-    # print(fns.dict)
     

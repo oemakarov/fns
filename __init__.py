@@ -1,5 +1,7 @@
-__version__ = '0.21'
-# __all__ = ["fns", ]
+__version__ = '0.22'
 
 from .fns import *
 from .fl import *
+
+# v0.22
+# - рефакторинг 

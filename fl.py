@@ -62,8 +62,6 @@ def find_fl_inn(fio_f: str,
         return {'code': 0, 'message' : f'Ошибка запроса к ФНС {e}'}
 
     if resp.status_code != requests.codes.ok :
-        # print('*** error : ошибка получения ответа. код ошибки =', resp.status_code) 
-        # resp.raise_for_status()
         return {'code': 0, 'message' : f'код ошибки {resp.status_code}'}
     else:
         return resp.json()
@@ -167,7 +165,6 @@ def _get_fl_inn_response(request_id: str):
         return {'code': 0, 'message' : f'Ошибка запроса к ФНС {e}'}
 
     if resp.status_code != requests.codes.ok :
-        # print('*** error : ошибка получения ответа. код ошибки =', resp.status_code) 
         return {'state': 0, 
                 'message' : _get_json_error_text_in_response(resp) or f'код ошибки {resp.status_code}'}
     else:
