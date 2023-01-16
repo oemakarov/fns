@@ -78,7 +78,7 @@ def find_fl_inn_new(fio_f: str,
                         docnumber: str, 
                         docdate: str, 
                         attempts:int = 5, 
-                        delay: float = 0.1) -> dict:
+                        delay: float = 0.3) -> dict:
     """Получение ИНН физлица по паспортным данным, новая версия метода ФНС. 
        Схема : запрос с данным документа, в ответе получаем номер запроса, 
                 по номеру запроса, повторно в цикле обращаемся в ФНС для получения данных ответа
@@ -171,6 +171,18 @@ def _get_fl_inn_response(request_id: str):
         return resp.json()
 
 
+def fl_passport_prepare(series: str, number: str) -> str:
+    """Приведение серии и номера паспорта к формату, для запроса на ИНН ФЛ
+        Необходимый формат "40 09 950176"
+
+    Args:
+        series (str): серия паспорта
+        number (str): номер паспорта
+
+    Returns:
+        str: подготовленный формат для запроса ИНН ФЛ
+    """
+    return f'{series[:2]} {series[2:]} {number}'
 
 
 
