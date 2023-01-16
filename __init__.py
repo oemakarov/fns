@@ -1,4 +1,4 @@
-from __version__ import __version__
+from .__version__ import __version__
 from .fns import FNS
 from .fl import (
     find_fl_inn,
