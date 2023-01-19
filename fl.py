@@ -162,7 +162,7 @@ def _get_fl_inn_response(request_id: str):
     try:
         resp = requests.post(url=url_fl_inn_new, data=data)
     except Exception as e:
-        return {'code': 0, 'message' : f'Ошибка запроса к ФНС {e}'}
+        return {'state': 0, 'message' : f'Ошибка запроса к ФНС {e}'}
 
     if resp.status_code != requests.codes.ok :
         return {'state': 0, 
